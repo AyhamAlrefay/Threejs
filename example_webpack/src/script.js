@@ -33,6 +33,8 @@ const colorTexture=textureloader.load('/textures/door/color.jpg')
 const earthTexture=textureloader.load('/textures/door/earth.jpg')
 const statTexture=textureloader.load('/textures/door/stare.png')
 const moonTexture=textureloader.load('/textures/door/moon.jpg')
+const towCubitBWTexture=textureloader.load('/textures/door/twoCubitBW.png')
+
 
 // const image =new Image()
 
@@ -58,7 +60,7 @@ const geometryBox =new THREE.BoxBufferGeometry(2,2,2)
 // const tourous=new THREE.TorusBufferGeometry(2,0.005,32,100)
 
 const materialBox =new THREE.MeshBasicMaterial({
-  map:colorTexture,
+  map:towCubitBWTexture,
 
 })
 
@@ -70,6 +72,9 @@ colorTexture.rotation=Math.PI/4
 colorTexture.center.x=0.5
 colorTexture.center.y=0.5
 
+//********Filter of image 
+towCubitBWTexture.magFilter=THREE.NearestFilter
+// towCubitBWTexture.minFilter=THREE.NearestFilter
 // colorTexture.wrapS=THREE.MirroredRepeatWrapping
 // colorTexture.wrapT=THREE.MirroredRepeatWrapping
 
