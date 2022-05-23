@@ -4,10 +4,9 @@ import gsap from 'gsap'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { WireframeGeometry } from 'three'
 import imageSoource from './door.jpg'
+import * as dat from 'dat.gui'
 
-//import * as dat from 'dat.gui'
-
-//const gui =new dat.GUI()
+const gui =new dat.GUI()
 
 //cursor
 const cursor={
@@ -25,55 +24,52 @@ cursor.y=-(event1.clientY/sizes.height-0.5)
 
 
 
-//Fonts
-const fontLoader=new THREE.FontLoader()
-fontLoader.load(
-'/fonts/helvetiker_regular.typeface.json',
-(font)=>
-{
-  const textGeometry =new THREE.TextBufferGeometry(
-    'Hello World',
-    {
-      font:font,
-      size:0.5,
-      height:0.2,
-      curveSegments:12,
-      bevelEnabled:true,
-      bevelThickness:0.03,
-      bevelSize:0.02,
-      bevelOffset:0,
-      bevelSegments:5
-    }
-  )
-  textGeometry.center()
-  const textMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
-  const text =new THREE.Mesh(textGeometry,textMaterial)
-  scene.add(text)
-  const dountGeometry=new THREE.TorusBufferGeometry(0.3,0.2,20,45)
-const dountMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
+// //Fonts
+// const fontLoader=new THREE.FontLoader()
+// fontLoader.load(
+// '/fonts/helvetiker_regular.typeface.json',
+// (font)=>
+// {
+//   const textGeometry =new THREE.TextBufferGeometry(
+//     'Hello World',
+//     {
+//       font:font,
+//       size:0.5,
+//       height:0.2,
+//       curveSegments:12,
+//       bevelEnabled:true,
+//       bevelThickness:0.03,
+//       bevelSize:0.02,
+//       bevelOffset:0,
+//       bevelSegments:5
+//     }
+//   )
+//   textGeometry.center()
+//   const textMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
+//   const text =new THREE.Mesh(textGeometry,textMaterial)
+//   scene.add(text)
+//   const dountGeometry=new THREE.TorusBufferGeometry(0.3,0.2,20,45)
+// const dountMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
 
 
-for(let i=0;i<300;i++)
-{
-const dount =new THREE.Mesh(dountGeometry,dountMaterial)
+// for(let i=0;i<300;i++)
+// {
+// const dount =new THREE.Mesh(dountGeometry,dountMaterial)
 
-dount.position.x=(Math.random() -0.5)*10
-dount.position.y=(Math.random() -0.5)*10
-dount.position.z=(Math.random() -0.5)*10
+// dount.position.x=(Math.random() -0.5)*10
+// dount.position.y=(Math.random() -0.5)*10
+// dount.position.z=(Math.random() -0.5)*10
 
-dount.rotation.x=Math.random()*Math.PI
-dount.rotation.y=Math.random()*Math.PI
+// dount.rotation.x=Math.random()*Math.PI
+// dount.rotation.y=Math.random()*Math.PI
 
-const scale =Math.random()
-dount.scale.set(scale,scale,scale)
+// const scale =Math.random()
+// dount.scale.set(scale,scale,scale)
 
-scene.add(dount)
-}
-
-}
-
-
-)
+// scene.add(dount)
+// }
+// }
+// )
 
 
 
@@ -110,14 +106,79 @@ const towCubitBWTexture=textureloader.load('/textures/door/twoCubitBW.png')
 const scene=new THREE.Scene()
 
 //Red cube 
-const geometryBox =new THREE.BoxBufferGeometry(2,2,2)
+const geometryBox =new THREE.BoxBufferGeometry(1,1,1)
 // const geometry =new THREE.SphereBufferGeometry(1,32,32)
 // const tourous=new THREE.TorusBufferGeometry(2,0.005,32,100)
 
 const materialBox =new THREE.MeshBasicMaterial({
-  map:towCubitBWTexture,
-
+ // map:towCubitBWTexture,
+//color:0xff0000
 })
+
+
+
+//Lighting
+
+
+
+const amibiantLight=new THREE.AmbientLight(0xffffff,0.5)
+ scene.add (amibiantLight)
+
+ gui.add(amibiantLight,'intensity').min(0).max(1).step(0.01)
+
+
+const directionLight=new THREE.DirectionalLight(0x00fffc,0.3)
+directionLight.position.set(1,0.25,0)
+scene.add(directionLight)
+
+const hemisphereLight=new THREE.HemisphereLight(0xff0000,0x0000ff,1)
+scene.add(hemisphereLight)
+
+const pointLight=new THREE.PointLight(0x00ffff,5)
+pointLight.position.set(1,- 0.5,1)
+scene.add(pointLight)
+
+const rectAreaLight=new THREE.RectAreaLight(0x4e00ff,2,1,1)
+rectAreaLight.position.set(-1.5,1,1.5)
+rectAreaLight.lookAt(new THREE.Vector3())
+scene.add(rectAreaLight)
+
+const spotLight=new THREE.SpotLight(0x78ff00,0.5,6,Math.PI*0.1,0.25,1 )
+spotLight.position.set(0,2,3)
+scene.add(spotLight)
+spotLight.target.position.x=-0.75
+scene.add(spotLight.target)
+
+//Helpers
+const directionLightHelper=new THREE.DirectionalLightHelper(directionLight,0.2)
+scene.add(directionLightHelper)
+const hemisphereLightHelper=new THREE.HemisphereLightHelper(hemisphereLight,0.2)
+scene.add(hemisphereLightHelper)
+const pointLightHelper=new THREE.PointLightHelper(pointLight,0.2)
+scene.add(pointLightHelper)
+const spotLightHelper=new THREE.SpotLightHelper(spotLight,0.2)
+scene.add(spotLightHelper)
+
+
+
+const geometry01=new THREE.BoxBufferGeometry(1,1,1)
+const material01 =new THREE.MeshStandardMaterial()
+const mesh01 =new THREE.Mesh(geometry01,material01)
+mesh01.position.x=2
+scene.add(mesh01)
+
+const geometry02=new THREE.SphereGeometry(0.5, 50, 50)
+const material02 =new THREE.MeshStandardMaterial()
+const mesh02=new THREE.Mesh(geometry02,material02)
+mesh02.position.x=-5
+scene.add(mesh02)
+
+const geometry03=new THREE.TorusBufferGeometry(0.3,0.2,20,45)
+const material03 =new THREE.MeshStandardMaterial()
+const mesh03=new THREE.Mesh(geometry03,material03)
+mesh03.position.x=-2
+scene.add(mesh03)
+
 
 // colorTexture.repeat.x=2
 // colorTexture.repeat.y=3
@@ -204,31 +265,34 @@ const meshBox =new THREE.Mesh(geometryBox,materialBox)
 // const group=new THREE.Group()
 
 
-    // scene.add(group)
-    // group.position.y=-1
-    // group.rotation.y=0.5
-    // const cube1=new THREE.Mesh(
-    //     new THREE.BoxGeometry(1,1,1),
-    //     new THREE.MeshBasicMaterial({color:0x00ff00})
-    // )
-    // group.add(cube1)
+//     scene.add(group)
+//     group.position.y=-1
+//     group.rotation.y=0.5
+//     const cube1=new THREE.Mesh(
+//         new THREE.BoxGeometry(1,1,1),
+//         new THREE.MeshBasicMaterial({color:0x00ff00})
+//     )
+//     group.add(cube1)
 
-    // const cube2=new THREE.Mesh(
-    //     new THREE.BoxGeometry(1,1,1),
-    //     new THREE.MeshBasicMaterial({color:0x0000ff})
-    // )
-    // cube2.position.x=-2
-    // group.add(cube2)
+//     const cube2=new THREE.Mesh(
+//         new THREE.BoxGeometry(1,1,1),
+//         new THREE.MeshBasicMaterial({color:0x00ff00})
+//     )
+//     cube2.position.x=-2
+//     group.add(cube2)
 
-    // const cube3=new THREE.Mesh(
-    //     new THREE.BoxGeometry(1,1,1),
-    //     new THREE.MeshBasicMaterial({color:0x00ff00})
-    // )
-    // cube3.position.x=2
-    // group.add(cube3)
+//     const cube3=new THREE.Mesh(
+//         new THREE.BoxGeometry(1,1,1),
+//         new THREE.MeshBasicMaterial({color:0x00ff00})
+//     )
+//     cube3.position.x=2
+   
+//     group.add(cube3)
 
+//     group.rotation.z=Math.PI
 
-    //AxesHelper
+// scene.add(group)
+//     //AxesHelper
     // const axesHelper=new THREE.AxesHelper(3)
     // scene.add(axesHelper)
 
