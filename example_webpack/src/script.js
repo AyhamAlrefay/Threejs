@@ -5,8 +5,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { WireframeGeometry } from 'three'
 import imageSoource from './door.jpg'
 
-console.log(imageSoource)
-//console.log(OrbitControls)
+//import * as dat from 'dat.gui'
+
+//const gui =new dat.GUI()
+
 //cursor
 const cursor={
     x:0,
@@ -23,12 +25,65 @@ cursor.y=-(event1.clientY/sizes.height-0.5)
 
 
 
+//Fonts
+const fontLoader=new THREE.FontLoader()
+fontLoader.load(
+'/fonts/helvetiker_regular.typeface.json',
+(font)=>
+{
+  const textGeometry =new THREE.TextBufferGeometry(
+    'Hello World',
+    {
+      font:font,
+      size:0.5,
+      height:0.2,
+      curveSegments:12,
+      bevelEnabled:true,
+      bevelThickness:0.03,
+      bevelSize:0.02,
+      bevelOffset:0,
+      bevelSegments:5
+    }
+  )
+  textGeometry.center()
+  const textMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
+  const text =new THREE.Mesh(textGeometry,textMaterial)
+  scene.add(text)
+  const dountGeometry=new THREE.TorusBufferGeometry(0.3,0.2,20,45)
+const dountMaterial=new THREE.MeshMatcapMaterial({matcap:matcapTexture})
+
+
+for(let i=0;i<300;i++)
+{
+const dount =new THREE.Mesh(dountGeometry,dountMaterial)
+
+dount.position.x=(Math.random() -0.5)*10
+dount.position.y=(Math.random() -0.5)*10
+dount.position.z=(Math.random() -0.5)*10
+
+dount.rotation.x=Math.random()*Math.PI
+dount.rotation.y=Math.random()*Math.PI
+
+const scale =Math.random()
+dount.scale.set(scale,scale,scale)
+
+scene.add(dount)
+}
+
+}
+
+
+)
+
 
 
 //texture
 const loadinManager=new THREE.LoadingManager()
 
 const textureloader=new THREE.TextureLoader(loadinManager)
+const matcapTexture=textureloader.load('/textures/matcaps/3.png')
+
+
 const colorTexture=textureloader.load('/textures/door/color.jpg')
 const earthTexture=textureloader.load('/textures/door/earth.jpg')
 const statTexture=textureloader.load('/textures/door/stare.png')
@@ -89,7 +144,7 @@ towCubitBWTexture.magFilter=THREE.NearestFilter
 const meshBox =new THREE.Mesh(geometryBox,materialBox)
 // const mesh =new THREE.Mesh(geometry,material)
 // const mesh1 =new THREE.Mesh(tourous,material1)
-scene.add(meshBox)
+//scene.add(meshBox)
 
 
 // var starGeometry = new THREE.SphereGeometry(100, 50, 50);
